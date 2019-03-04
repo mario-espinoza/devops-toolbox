@@ -8,13 +8,19 @@ Pipe and awk
 
 ### Networking
 
-nslookup
+* nslookup
 
-Tricks when no curl 
+* Tricks when no curl 
 ```
 exec 3<> /dev/tcp/$DESTINY_IP/$DESTINY_PORT;echo $?
 
 exec 3<> /dev/tcp/52.11.213.82/22;echo $?
+```
+
+* show Ips by interface
+Ex: interface eth0
+```
+ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//'
 ```
 
 ## Kubernetes
