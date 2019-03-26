@@ -22,6 +22,21 @@ Ex: interface eth0
 ```
 ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//'
 ```
+* To find process that uses a port
+Good-ole netstat
+```
+netstat -ltnp | grep -w ':80' 
+```
+LSOF
+```
+lsof -i :80 
+```
+Using `fuser` and `ps`
+```
+fuser 80/tcp
+ps -p 2053 -o comm=
+```
+
 
 ## Kubernetes
 
