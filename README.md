@@ -8,35 +8,84 @@ Pipe and awk
 
 ### Networking
 
-* nslookup
+1. nslookup
 
-* Tricks when no curl 
+´´´
+nslookup
+´´´
+
+2. Tricks when no curl 
 ```
 exec 3<> /dev/tcp/$DESTINY_IP/$DESTINY_PORT;echo $?
 
 exec 3<> /dev/tcp/52.11.213.82/22;echo $?
 ```
 
-* show Ips by interface
+3. show Ips by interface
 Ex: interface eth0
 ```
 ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//'
 ```
-* To find process that uses a port
-Good-ole netstat
+4. To find process that uses a port
+a. Good-ole netstat
 ```
 netstat -ltnp | grep -w ':80' 
 ```
-LSOF
+b. LSOF
 ```
 lsof -i :80 
 ```
-Using `fuser` and `ps`
+c. Using `fuser` and `ps``
 ```
 fuser 80/tcp
 ps -p 2053 -o comm=
 ```
+## PM2 CheatSheet
+# Fork mode
+`pm2 start app.js --name my-api # Name process`
 
+# Cluster mode
+`pm2 start app.js -i 0        # Will start maximum processes with LB depending on available CPUs`
+`pm2 start app.js -i max      # Same as above, but deprecated.`
+
+# Listing
+
+`pm2 list               # Display all processes status`
+`pm2 jlist              # Print process list in raw JSON`
+`pm2 prettylist         # Print process list in beautified JSON`
+
+`pm2 describe 0         # Display all informations about a specific process`
+
+`pm2 monit              # Monitor all processes`
+
+# Logs
+
+`pm2 logs [--raw]       # Display all processes logs in streaming`
+`pm2 flush              # Empty all log files`
+`pm2 reloadLogs         # Reload all logs`
+
+# Actions
+
+`pm2 stop all           # Stop all processes`
+pm2 restart all        # Restart all processes
+
+pm2 reload all         # Will 0s downtime reload (for NETWORKED apps)
+
+pm2 stop 0             # Stop specific process id
+pm2 restart 0          # Restart specific process id
+
+pm2 delete 0           # Will remove process from pm2 list
+pm2 delete all         # Will remove all processes from pm2 list
+
+# Misc
+
+pm2 reset <process>    # Reset meta data (restarted time...)
+pm2 updatePM2          # Update in memory pm2
+pm2 ping               # Ensure pm2 daemon has been launched
+pm2 sendSignal SIGUSR2 my-app # Send system signal to script
+pm2 start app.js --no-daemon
+pm2 start app.js --no-vizion
+pm2 start app.js --no-autorestart
 
 ## Kubernetes
 
